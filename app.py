@@ -115,7 +115,6 @@ if page == "1. Load & Sample":
                     st.success(f"Selected {len(st.session_state.selected_points)} points across {len(cache)} temperatures.")
                 else:
                     st.warning("No points selected.")
-
     # 4. Plotting
     if not st.session_state.selected_points.empty:
         st.write("### Preview Selection")
@@ -138,12 +137,21 @@ if page == "1. Load & Sample":
         ax.set_xlabel("Frequency (Hz)")
         ax.set_ylabel("Temperature (°C)")
         ax.set_zlabel("Storage Modulus (MPa)")
+        
+        # --- NEW CODE: ROTATE 180 DEGREES ---
+        # elev=30 is the default up/down angle. 
+        # azim=120 rotates it 180 degrees from the default -60 view.
+        ax.view_init(elev=30, azim=120) 
+        # ------------------------------------
+
         fig.colorbar(sc, shrink=0.5, aspect=10)
         
         st.pyplot(fig)
         
         with st.expander("View Raw Data"):
             st.dataframe(st.session_state.selected_points)
+            
+
 
 # ================= PAGE 2: Training =================
 elif page == "2. Train Model":
@@ -273,7 +281,11 @@ elif page == "3. Prediction":
                 green_patch = mpatches.Patch(color='green', alpha=0.3, label='Ground Truth')
                 blue_patch = mpatches.Patch(color='blue', alpha=0.6, label='Prediction')
                 ax.legend(handles=[green_patch, blue_patch])
-                
+                # --- NEW CODE: ROTATE 180 DEGREES ---
+                # elev=30 is the default up/down angle. 
+                # azim=120 rotates it 180 degrees from the default -60 view.
+                ax.view_init(elev=30, azim=120) 
+                # ------------------------------------
                 st.pyplot(fig)
                 
                 # Save results for next page
@@ -304,6 +316,11 @@ elif page == "4. Surface View":
         ax.set_ylabel(y_label)
         ax.set_title("ML Predicted Surface")
         fig.colorbar(surf, shrink=0.5, aspect=10)
+        # --- NEW CODE: ROTATE 180 DEGREES ---
+        # elev=30 is the default up/down angle. 
+        # azim=120 rotates it 180 degrees from the default -60 view.
+        ax.view_init(elev=30, azim=120) 
+        # ------------------------------------
         
         st.pyplot(fig)
         
@@ -315,4 +332,5 @@ elif page == "4. Surface View":
         })
         csv = csv_df.to_csv(index=False).encode('utf-8')
         
+
         st.download_button("Download Predictions as CSV", csv, "predictions.csv", "text/csv")
